@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get token from URL query parameter
     const urlParams = new URLSearchParams(window.location.search);
     token = urlParams.get('token');
-    
+
     // First check if token exists locally
     if (!token) {
         showNuclearError('Missing access token. Please return to the security gateway.');
@@ -764,6 +764,14 @@ function showSuccess(result) {
     successDetails.textContent = result.message || 'Your gift card has been processed successfully!';
     document.getElementById('section-2').classList.remove('active');
     successMessage.classList.add('active');
+    
+    // Update progress steps to show step 3 as active
+    document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+    });
+    document.querySelector('.step[data-step="3"]').classList.add('active');
+    
+    currentSection = 3; // Update current section to confirmation
 }
 
 function showError(message) {
@@ -790,6 +798,14 @@ function resetForm() {
     document.querySelectorAll('.custom-option.selected').forEach(option => {
         option.classList.remove('selected');
     });
+    
+    // Reset progress steps to show step 1 as active
+    document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+    });
+    document.querySelector('.step[data-step="1"]').classList.add('active');
+    
+    currentSection = 1; // Reset current section
 }
 
 // Utility functions
