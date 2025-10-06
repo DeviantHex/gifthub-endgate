@@ -7,7 +7,7 @@ const rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
+const BACKEND_URL = process.env.BACKEND_URL || 'https://securehub-backend-pre-final.onrender.com';
 
 // Security middleware
 app.use(helmet({
@@ -185,4 +185,5 @@ app.listen(PORT, () => {
   console.log(`🔗 Backend: ${BACKEND_URL}`);
   console.log(`🛡️  Security features enabled`);
   console.log(`======================================\n`);
+
 });
