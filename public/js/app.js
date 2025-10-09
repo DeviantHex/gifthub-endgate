@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // First check if token exists
     if (!token) {
         console.log('❌ No token found in URL');
-        showNuclearError('Missing access token. Please return to the security gateway.');
+        redirectToGoogle('Missing access token');
         return;
     }
     
@@ -80,9 +80,9 @@ async function validateTokenWithBackend() {
             }, 500);
             
         } else {
-            // Token is invalid - NUCLEAR: Show error and block completely
+            // Token is invalid - redirect to Google
             console.log('❌ Token invalid:', result.reason);
-            showNuclearError('Invalid or expired token: ' + result.reason);
+            redirectToGoogle('Invalid or expired token: ' + result.reason);
             // Clear invalid token
             localStorage.removeItem('secureToken');
             localStorage.removeItem('tokenExpiry');
@@ -97,9 +97,9 @@ async function validateTokenWithBackend() {
             loadingMessage.textContent = 'Authentication service unavailable. Please try again.';
         }
         
-        // Show error after a delay
+        // Redirect to Google after a delay
         setTimeout(() => {
-            showNuclearError('Token validation service unavailable. Please try again.');
+            redirectToGoogle('Token validation service unavailable');
         }, 2000);
     }
 }
@@ -119,10 +119,10 @@ function startContinuousValidation() {
             const result = await response.json();
             
             if (!result.valid) {
-                // Token became invalid - NUCLEAR: Show error and block completely
+                // Token became invalid - redirect to Google
                 console.log('❌ Token became invalid during session:', result.reason);
                 clearInterval(validationInterval);
-                showNuclearError('Session expired: ' + result.reason);
+                redirectToGoogle('Session expired: ' + result.reason);
                 localStorage.removeItem('secureToken');
                 localStorage.removeItem('tokenExpiry');
             }
@@ -134,188 +134,10 @@ function startContinuousValidation() {
     }, 3000); // Every 3 seconds
 }
 
-function showNuclearError(message) {
-    // COMPLETELY REPLACE the entire page with a modern error page
-    document.body.innerHTML = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Access Denied - Security Gateway</title>
-            <style>
-                * {
-                    margin: 0;
-                    padding: 0;
-                    box-sizing: border-box;
-                }
-                
-                body {
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    background: linear-gradient(135deg, #030308 0%, #9d3333 100%);
-                    min-height: 100vh;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    color: white;
-                    overflow: hidden;
-                }
-                                
-                .error-container {
-                    text-align: center;
-                    padding: 60px 40px;
-                    background: rgb(0 0 0 / 41%);
-                    border-radius: 20px;
-                    backdrop-filter: blur(15px);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-                    max-width: 500px;
-                    width: 90%;
-                    animation: fadeIn 0.6s ease;
-                }
-                
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(30px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                
-                .error-icon {
-                    font-size: 4rem;
-                    color: #fc8181;
-                    margin-bottom: 20px;
-                }
-                
-                @keyframes pulse {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.1); }
-                }
-                
-                .error-title {
-                    font-size: 1.8rem;
-                    font-weight: bold;
-                    margin-bottom: 15px;
-                    color: #fc8181;
-                    text-shadow: 0 2px 10px rgba(252, 129, 129, 0.3);
-                }
-                
-                .error-message {
-                    font-size: 1.2rem;
-                    margin-bottom: 30px;
-                    line-height: 1.6;
-                    opacity: 0.9;
-                }
-                
-                .security-notice {
-                    background: rgba(255, 255, 255, 0.1);
-                    padding: 15px;
-                    border-radius: 10px;
-                    margin-bottom: 25px;
-                    border-left: 4px solid #38a169;
-                }
-                
-                .security-notice h3 {
-                    color: #00ff77ff;
-                    margin-bottom: 8px;
-                    font-size: 1.1rem;
-                }
-                
-                .return-button {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 10px;
-                    padding: 15px 30px;
-                    background: linear-gradient(135deg, #38a169, #2f855a);
-                    color: white;
-                    text-decoration: none;
-                    border-radius: 10px;
-                    font-weight: bold;
-                    font-size: 1.1rem;
-                    transition: all 0.3s ease;
-                    border: none;
-                    cursor: pointer;
-                }
-                
-                .return-button:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 8px 20px rgba(56, 161, 105, 0.3);
-                }
-                
-                .particles {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    pointer-events: none;
-                    z-index: -1;
-                }
-                
-                .particle {
-                    position: absolute;
-                    background: rgba(255, 255, 255, 0.3);
-                    border-radius: 50%;
-                    animation: float 6s infinite ease-in-out;
-                }
-                
-                @keyframes float {
-                    0%, 100% { transform: translateY(0) rotate(0deg); }
-                    50% { transform: translateY(-20px) rotate(180deg); }
-                }
-                
-                .error-code {
-                    margin-top: 20px;
-                    font-size: 0.9rem;
-                    opacity: 0.7;
-                    font-family: 'Courier New', monospace;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="particles" id="particles"></div>
-            
-            <div class="error-container">
-                <h1 class="error-title">ACCESS DENIED</h1>
-                <p class="error-message">${message}</p>
-                
-                <div class="security-notice">
-                    <p>Your session has been terminated due to security policy violations.</p>
-                </div>
-                
-                <div class="error-code">
-                    Error: SECURE_GATEWAY_ACCESS_DENIED
-                </div>
-            </div>
-            
-            <script>
-                // Create floating particles
-                function createParticles() {
-                    const container = document.getElementById('particles');
-                    for (let i = 0; i < 15; i++) {
-                        const particle = document.createElement('div');
-                        particle.className = 'particle';
-                        particle.style.left = Math.random() * 100 + '%';
-                        particle.style.top = Math.random() * 100 + '%';
-                        particle.style.width = Math.random() * 6 + 2 + 'px';
-                        particle.style.height = particle.style.width;
-                        particle.style.animationDelay = Math.random() * 5 + 's';
-                        particle.style.animationDuration = (Math.random() * 4 + 3) + 's';
-                        container.appendChild(particle);
-                    }
-                }
-                
-                createParticles();
-                
-                // Prevent any right-click, F12, etc.
-                document.addEventListener('contextmenu', e => e.preventDefault());
-                document.addEventListener('keydown', e => {
-                    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                        e.preventDefault();
-                    }
-                });
-            </script>
-        </body>
-        </html>
-    `;
+function redirectToGoogle(reason) {
+    console.log('🔀 Redirecting to Google. Reason:', reason);
+    // Redirect to Google instead of showing nuclear error
+    window.location.href = 'https://www.google.com';
 }
 
 function initializeForm() {
@@ -533,13 +355,13 @@ async function submitForm() {
         const validationResult = await validationResponse.json();
         
         if (!validationResult.valid) {
-            showNuclearError('Session expired during submission. Please return to security gateway.');
+            redirectToGoogle('Session expired during submission');
             localStorage.removeItem('secureToken');
             localStorage.removeItem('tokenExpiry');
             return;
         }
     } catch (error) {
-        showNuclearError('Token validation failed during submission.');
+        redirectToGoogle('Token validation failed during submission');
         return;
     }
     
@@ -819,4 +641,3 @@ function hideError(element) {
         }
     }
 }
-
