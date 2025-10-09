@@ -152,7 +152,7 @@ function showNuclearError(message) {
                 
                 body {
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    background: linear-gradient(135deg, #0e0e0fff 0%, #070e17ff 100%);
+                    background: linear-gradient(135deg, #030308 0%, #9d3333 100%);
                     min-height: 100vh;
                     display: flex;
                     justify-content: center;
@@ -160,11 +160,11 @@ function showNuclearError(message) {
                     color: white;
                     overflow: hidden;
                 }
-                
+                                
                 .error-container {
                     text-align: center;
                     padding: 60px 40px;
-                    background: rgba(255, 255, 255, 0.1);
+                    background: rgb(0 0 0 / 41%);
                     border-radius: 20px;
                     backdrop-filter: blur(15px);
                     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -819,3 +819,4 @@ function hideError(element) {
         }
     }
 }
+
