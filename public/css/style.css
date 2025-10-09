@@ -70,7 +70,7 @@ body {
     padding: 32px;
     box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
     position: relative;
-    overflow: auto;
+    overflow: visible;
     border: 1px solid #f1f5f9;
 }
 
@@ -668,4 +668,5 @@ input:focus-visible,
 .custom-options::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
 }
+
 
