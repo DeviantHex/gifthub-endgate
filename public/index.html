@@ -8,7 +8,21 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+    <!-- Initial Loading Screen -->
+    <div class="initial-loading-overlay active" id="initialLoadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner-large"></div>
+            <h3>Verifying Security Token</h3>
+            <p>Please wait while we validate your session...</p>
+            <div class="security-badge-loading">
+                <i class="fas fa-shield-alt"></i>
+                <span>Secure Authentication in Progress</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (Hidden until validated) -->
+    <div class="container" id="mainContainer" style="display: none;">
         <!-- Header -->
         <header class="header">
             <div class="logo">
@@ -293,7 +307,7 @@
                     </div>
                 </form>
 
-                <!-- Loading Overlay -->
+                <!-- Processing Overlay -->
                 <div class="loading-overlay" id="loadingOverlay">
                     <div class="loading-spinner"></div>
                     <p>Processing your request...</p>
